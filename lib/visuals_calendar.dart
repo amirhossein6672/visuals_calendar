@@ -94,7 +94,7 @@ class VisualsCalendarState extends State<VisualsCalendar> {
   late int pageIndex;
 
   // Main scroll controller
-  final ScrollController _mainController = ScrollController(
+  ScrollController _mainController = ScrollController(
     initialScrollOffset: 750,
   );
 
@@ -157,6 +157,9 @@ class VisualsCalendarState extends State<VisualsCalendar> {
         if (_mainController.position.pixels ==
             _mainController.position.maxScrollExtent) {
           widget.scrollEndCall?.call(events.isNotEmpty ? events.last : null);
+          _mainController = ScrollController(
+            initialScrollOffset: 750,
+          );
         }
       });
     });
