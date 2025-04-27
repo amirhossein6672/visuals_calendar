@@ -51,7 +51,7 @@ class VisualsCalendar extends StatefulWidget {
 
   void Function(Event?)? scrollEndCall;
 
-    VisualsCalendar({
+  VisualsCalendar({
     super.key,
     required this.defaultFormat,
     this.loading,
@@ -151,12 +151,14 @@ class VisualsCalendarState extends State<VisualsCalendar> {
     }
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _mainController.addListener(() { 
+      _mainController.addListener(() {
         print('scrolling');
+
+        if (_mainController.position.pixels ==
+            _mainController.position.maxScrollExtent) {
+          widget.scrollEndCall?.call(events.isNotEmpty ? events.last : null);
+        }
       });
-      if(_mainController.position.pixels == _mainController.position.maxScrollExtent){
-        widget.scrollEndCall?.call(events.isNotEmpty ? events.last : null);
-      }
     });
   }
 
