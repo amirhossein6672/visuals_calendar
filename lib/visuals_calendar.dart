@@ -1,3 +1,5 @@
+import 'dart:nativewrappers/_internal/vm/lib/ffi_allocation_patch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -49,7 +51,9 @@ class VisualsCalendar extends StatefulWidget {
   // Optionan end drawer for the calendar.
   final Widget? endDrawer;
 
-  const VisualsCalendar({
+  void Function(Event?)? scrollEndCall;
+
+    VisualsCalendar({
     super.key,
     required this.defaultFormat,
     this.loading,
@@ -62,6 +66,7 @@ class VisualsCalendar extends StatefulWidget {
     this.style,
     this.drawer,
     this.endDrawer,
+    this.scrollEndCall,
   });
 
   @override
@@ -146,6 +151,15 @@ class VisualsCalendarState extends State<VisualsCalendar> {
         });
       });
     }
+
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _mainController.addListener(() { 
+        print('scrolling');
+      });
+      if(_mainController.position.pixels == _mainController.position.maxScrollExtent){
+        widget.scrollEndCall?.call(events.isNotEmpty ? events.last : null);
+      }
+    });
   }
 
   @override
